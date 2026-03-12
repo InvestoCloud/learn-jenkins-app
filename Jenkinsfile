@@ -17,7 +17,7 @@ pipeline {
                 npm ci
                 npm run build
                 ls -la
-                grep index.html build
+                grep "index.html" build
                 '''
             }
         }
