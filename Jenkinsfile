@@ -2,15 +2,21 @@ pipeline {
     agent any
 
     stages {
-        stage('Lab 1 Practice') {
+        stage('Build') {
+            agent{
+                docker{
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
             steps {
-                echo 'This is Lab 1 work'
                 sh '''
-                mkdir build
-                touch build/computer.txt
-                echo "Mainboard" >> build/computer.txt
-                echo "Display" >> build/computer.txt
-                grep "Display" build/computer.txt
+                ls -la
+                node --version
+                npm --version
+                npm ci
+                npm run build
+                ls -la
                 '''
             }
         }
