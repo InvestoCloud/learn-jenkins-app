@@ -17,7 +17,6 @@ pipeline {
                 npm ci
                 npm run build
                 ls -la
-                grep "index.html" build
                 '''
             }
         }
@@ -26,6 +25,9 @@ pipeline {
             steps {
                 sh '''
                 echo "Test stage"
+                ls -la build
+                test -f build/index.html
+                echo "Build artifact verified"
                 '''
             }
         }
