@@ -28,6 +28,7 @@ pipeline {
                 ls -la build
                 test -f build/index.html
                 echo "Build artifact verified"
+                npm test
                 '''
             }
         }
