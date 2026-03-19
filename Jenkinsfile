@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     stages {
-        
         stage('Build') {
             agent {
                 docker {
@@ -21,7 +20,6 @@ pipeline {
                 '''
             }
         }
-        
 
         stage('Test') {
             agent {
@@ -39,7 +37,9 @@ pipeline {
                     npm test
                 '''
             }
-            stage('Build') {
+        }
+
+        stage('Netlify') {
             agent {
                 docker {
                     image 'node:18-alpine'
@@ -58,7 +58,6 @@ pipeline {
     post {
         always {
             junit 'test-results/junit.xml'
-            }
         }
     }
 }
