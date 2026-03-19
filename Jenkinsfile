@@ -2,6 +2,8 @@ pipeline {
     agent any
 
     stages {
+        /*
+
         stage('Build') {
             agent {
                 docker {
@@ -20,6 +22,7 @@ pipeline {
                 '''
             }
         }
+        */
 
         stage('Test') {
             agent {
@@ -28,28 +31,29 @@ pipeline {
                     reuseNode true
                 }
             }
+
             steps {
                 sh '''
-                    echo "Test stage"
-                    ls -la build
-                    # test -f build/index.html
-                    echo "Build artifact verified"
+                    #test -f build/index.html
                     npm test
                 '''
             }
         }
 
-        stage('Netlify') {
+        stage('E2E') {
             agent {
                 docker {
-                    image 'node:18-alpine'
+                    image 'docker pull mcr.microsoft.com/playwright:v1.58.2-noble'
                     reuseNode true
                 }
             }
+
             steps {
                 sh '''
-                    npm install -g netlify-cli
-                    netlify --version
+                    npm install serve
+                    node_modules/.bin/serve -s build &
+                    sleep 10
+                    npx playwright test
                 '''
             }
         }
@@ -57,7 +61,7 @@ pipeline {
 
     post {
         always {
-            junit 'test-results/junit.xml'
+            junit 'jest-results/junit.xml'
         }
     }
 }
